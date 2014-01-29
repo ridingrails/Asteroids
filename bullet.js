@@ -1,30 +1,35 @@
 (function (root) {
-  var Asteroids = root.Asteroids = (root.Asteroids || {});
-
-  var Bullet = Asteroids.Bullet = function (pos, vel) {
-    this.vel = vel;
-    this.color = Bullet.COLOR;
-    this.radius = Bullet.RADIUS;
-    Asteroids.MovingObject.call(this, pos, this.vel, this.color, this.radius);
-  };
-
-  Bullet.RADIUS = 5;
-  Bullet.COLOR = 'blue';
-
-  Bullet.inherits(Asteroids.MovingObject);
+  var Asteroids;
 
 
-  Bullet.prototype.hitAsteroids = function () {
-    var game = Asteroids.Game;
-    var asteroidArray = game.asteroids;
-    var length = asteroidArray.length;
-    for (var i = 0; i < length; i++) {
-      if (this.isCollidedWith(asteroidArray[i])) {
-        game.removeAsteroid(i);
-      }
-    }
+  if (typeof(window) === 'undefined') {
+    Asteroids = global.Asteroids = (global.Asteroids || {});
+  } else {
+    Asteroids = window.Asteroids = (window.Asteroids || {});
   }
 
+  var Bullet = Asteroids.Bullet = function (options) {
+    options.radius = Bullet.RADIUS
+    options.color = options.color;
 
+    Asteroids.MovingObject.call(this, options);
+  };
+
+  Bullet.RADIUS = 2;
+  Bullet.SPEED = 15;
+
+  Asteroids.Util.inherits(Bullet, Asteroids.MovingObject);
+
+
+  Bullet.prototype.collideWith = function (otherObject) {
+    if (otherObject.contructor !== Asteroids.Asteroid) {
+      return;
+    }
+
+    this.remove();
+    otherObject.remove();
+  };
+
+  Bullet.prototype.isWrappable = false;
 })(this);
 

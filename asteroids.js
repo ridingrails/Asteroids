@@ -1,27 +1,41 @@
 (function (root) {
-  var Asteroids = root.Asteroids = (root.Asteroids || {});
+  var = Asteroids;
 
-  var Asteroid = Asteroids.Asteroid = function (pos, vel) {
-    Asteroids.MovingObject.call(this, pos, vel, COLOR, RADIUS);
+  if (typeof(window) === 'undefined') {
+    Asteroids = global.Asteroids = (global.Asteroids || {});
+  } else {
+    Asteroids = window.Asteroids = (window.Asteroids || {});
+  }
+
+  var Asteroid = Asteroids.Asteroid = function (options) {
+    options.radius = Asteroid.RADIUS;
+    options.color = Asteroid.GRAY
+
+    Asteroids.MovingObject.call(this, options);
   };
 
-  COLOR = 'black';
-  RADIUS = 30;
-
-  Asteroid.inherits(Asteroids.MovingObject);
-
-  Asteroid.randomAsteroid = function (dimX, dimY) {
-    x = Math.random() * dimX;
-    y = Math.random() * dimY;
-    var velocity = randomVec();
-    return new Asteroid([x, y], velocity, COLOR, RADIUS);
+  Asteroid.GRAY = "#555";
+  Asteroid.RADIUS = 25;
+  Asteroid.SPEED = 4;
+ 
+  Asteroid.randomAsteroid = function (game) {
+    return new Asteroid({
+      pos: game.randomPosition(),
+      vel: Asteroids.Util.randomVec(Asteroid.SPEED),
+      game: game
+    });
   };
 
-  var randomVec = function () {
-    vecX = Math.random() * 10;
-    vecY = Math.random() * 10;
-    return [vecX, vecY];
-  };
+  Asteroids.Util.inherits(Asteroid, Asteroids.MovingObject);
+
+
+  Asteroid.prototype.collideWith = function(otherObject) {
+    if (otherObject.constructor !== Asteroids.Ship) {
+      return;
+    }
+ 
+    otherObject.relocate();
+  }
 
 })(this);
 
