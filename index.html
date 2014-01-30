@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Asteroids</title>
-</head>
-<body>
-    <canvas width="1000" height="500"></canvas>
+  <head>
+    <script type="application/javascript" src="vendor/jquery-1.9.1.js"></script>
+    <script type="application/javascript" src="vendor/keymaster.js"></script>
 
-    <script src="util.js"></script>
-    <script src="keymaster.js"></script>
-    <script src="moving_object.js"></script>
-    <script src="asteroids.js"></script>
-    <script src="ship.js"></script>
-    <script src="bullet.js"></script>
-    <script src="game.js"></script>
-    <script>
-        var canvas = document.getElementsByTagName("canvas")[0];
-        //new Circles.Game(500, 500, 10).start(canvas);
-        // var a = new Asteroids.MovingObject([30,30],[1,1],20,'black');
-        var g = new Asteroids.Game(canvas.getContext("2d"));
-        // a.draw(canvas.getContext("2d"));
-        g.start();
+    <script type="application/javascript" src="lib/util.js"></script>
+    <script type="application/javascript" src="lib/moving_object.js"></script>
+    <script type="application/javascript" src="lib/asteroid.js"></script>
+    <script type="application/javascript" src="lib/ship.js"></script>
+    <script type="application/javascript" src="lib/bullet.js"></script>
+    <script type="application/javascript" src="lib/game.js"></script>
+    <script type="application/javascript" src="lib/game_view.js"></script>
+  </head>
 
+  <body>
+    <script type="application/javascript">
+      $(function () {
+        var canvas = $("<canvas width='" + Asteroids.Game.DIM_X + 
+                       "' height='" + Asteroids.Game.DIM_Y + "'></canvas>");
+        $('body').append(canvas);
+
+        var ctx = canvas.get(0).getContext("2d");
+        var game = Asteroids.Game.new();
+        new Asteroids.GameView(game, ctx).start();
+      });
     </script>
-</body>
+  </body>
 </html>
